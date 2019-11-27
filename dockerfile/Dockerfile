@@ -11,7 +11,7 @@ ENV PASV_ADDRESS REQUIRED
 COPY vsftpd.conf /etc/vsftpd/
 COPY vsftpd_virtual /etc/pam.d/
 COPY run.sh /usr/sbin/
-COPY onedriver/onedriver /usr/sbin/
+COPY onedriver /usr/sbin/
 
 RUN chmod +x /usr/sbin/run.sh /usr/sbin/onedriver && \
 		mkdir -p /var/run/vsftpd/empty
