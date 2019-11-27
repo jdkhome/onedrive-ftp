@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -54,14 +55,28 @@ func (a *Auth) Refresh() {
 			"&redirect_uri=" + authRedirectURL +
 			"&refresh_token=" + a.RefreshToken +
 			"&grant_type=refresh_token")
-		resp, err := http.Post(authTokenURL,
-			"application/x-www-form-urlencoded",
-			postData)
+
+		tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+		client := &http.Client{Transport: tr}
+		req, err := http.NewRequest("POST", authTokenURL, postData)
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		resp, err :=client.Do(req)
 		if err != nil {
 			log.WithFields(log.Fields{
 				"err": err,
 			}).Fatal("Could not POST to renew tokens, exiting.")
 		}
+
+		//resp, err := http.Post(authTokenURL,
+		//	"application/x-www-form-urlencoded",
+		//	postData)
+		//if err != nil {
+		//	log.WithFields(log.Fields{
+		//		"err": err,
+		//	}).Fatal("Could not POST to renew tokens, exiting.")
+		//}
 		defer resp.Body.Close()
 
 		body, _ := ioutil.ReadAll(resp.Body)
