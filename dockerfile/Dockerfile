@@ -16,9 +16,7 @@ COPY onedriver/onedriver /usr/sbin/
 RUN chmod +x /usr/sbin/run.sh /usr/sbin/onedriver && \
 		mkdir -p /var/run/vsftpd/empty
 
-#VOLUME /home/vsftpd
 VOLUME /var/log/vsftpd
-RUN mkdir -p /data
 
 EXPOSE 20 21
 

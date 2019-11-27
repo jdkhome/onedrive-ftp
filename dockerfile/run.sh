@@ -14,8 +14,8 @@ echo "guest_username=root" >> /etc/vsftpd/vsftpd.conf
 
 # Run vsftpd:
 sleep 10 && vsftpd /etc/vsftpd/vsftpd.conf &
+
+# Run onedriver:
 mkdir -p /home/vsftpd
-chown -R ftp:ftp /home/vsftpd
-usermod -g root ftp
 /usr/sbin/onedriver /home/vsftpd
 
