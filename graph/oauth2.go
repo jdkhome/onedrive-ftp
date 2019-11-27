@@ -108,9 +108,18 @@ func getAuthTokens(authCode string) Auth {
 			"&redirect_uri=" + authRedirectURL +
 			"&code=" + authCode +
 			"&grant_type=authorization_code")
-	resp, err := http.Post(authTokenURL,
-		"application/x-www-form-urlencoded",
-		postData)
+
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+	req, err := http.NewRequest("POST", authTokenURL, postData)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err :=client.Do(req)
+	//resp, err := http.Post(authTokenURL,
+	//	"application/x-www-form-urlencoded",
+	//	postData)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
