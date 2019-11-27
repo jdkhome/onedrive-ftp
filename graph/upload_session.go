@@ -2,6 +2,7 @@ package graph
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -159,7 +160,10 @@ func (u *UploadSession) uploadChunk(auth *Auth, offset uint64) ([]byte, int, err
 
 	auth.Refresh()
 
-	client := &http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
 	request, _ := http.NewRequest(
 		"PUT",
 		u.UploadURL,

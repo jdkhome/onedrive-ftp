@@ -3,6 +3,7 @@ package graph
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -39,8 +40,10 @@ func Request(resource string, auth *Auth, method string, content io.Reader) ([]b
 	}
 
 	auth.Refresh()
-
-	client := &http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
 	request, _ := http.NewRequest(method, graphURL+resource, content)
 	request.Header.Add("Authorization", "bearer "+auth.AccessToken)
 	switch method { // request type-specific code here
