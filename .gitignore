@@ -12,3 +12,5 @@ mount/
 *.rpm
 *.deb
 onedriver
+
+.idea
